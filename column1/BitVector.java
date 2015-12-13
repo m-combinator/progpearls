@@ -3,59 +3,60 @@ public class BitVector {
 
     private int [] vector;
     private static final int BUCKET_WIDTH = 32;
-    private long bitCount;
+    private static final int SHIFT = 5;
+    private static final int MASK = 0x1f;
+    private int bitCount;
 
-    public BitVector(long bitCount) {
+    public BitVector(int bitCount) {
         this.bitCount = bitCount;
-        int size = 1+(int)(bitCount/BUCKET_WIDTH);
+        int size = 1+getBucket(bitCount);
         vector = new int[size];
     }
 
-    private void checkValidBit(long bit) {
+    private void checkValidBit(int bit) {
         if (bit < 0 || bit >= bitCount) {
             throw new IndexOutOfBoundsException("Bit index is invalid.");
         }
     }
 
-    public boolean testBit(long bit) {
+    public boolean testBit(int bit) {
         checkValidBit(bit);
         int bucket = getBucket(bit);
         int position = getPosition(bit);
         return ((1 << position) & vector[bucket]) != 0;
     }
 
-    public void setBit(long bit) {
+    public void setBit(int bit) {
         checkValidBit(bit);
         int bucket = getBucket(bit);
         int position = getPosition(bit);
         vector[bucket] |= (1 << position);
     }
 
-    public void clearBit(long bit) {
+    public void clearBit(int bit) {
         checkValidBit(bit);
         int bucket = getBucket(bit);
         int position = getPosition(bit);
-        int mask = 0xFFFFFFFF ^ (1 << position);
-        vector[bucket] &= mask;
+        vector[bucket] &= ~(1 << position);
     }
 
-    public void flipBit(long bit) {
+    public void flipBit(int bit) {
         checkValidBit(bit);
         int bucket = getBucket(bit);
         int position = getPosition(bit);
         vector[bucket] ^= (1 << position);
     }
 
-    public long bitCount() {
+    public int bitCount() {
         return bitCount;
     }
 
-    private static int getBucket(long bit) {
-        return (int)(bit/BUCKET_WIDTH);
+    private static int getBucket(int bit) {
+        return (bit >> SHIFT);
     }
 
-    private static int getPosition(long bit) {
-        return (int)(bit%BUCKET_WIDTH);
+    private static int getPosition(int bit) {
+        return (bit & MASK);
     }
 
     public static void main(String[]args) {
@@ -67,6 +68,8 @@ public class BitVector {
         bv.setBit(15);
         bv.clearBit(22);
         bv.flipBit(8);
+        bv.setBit(33);
+        bv.flipBit(22);
         for (int i = 0; i < bv.bitCount(); i++) {
             if (bv.testBit(i)) {
                 System.out.println(i);
