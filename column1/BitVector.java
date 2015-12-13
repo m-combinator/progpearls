@@ -66,6 +66,7 @@ public class BitVector {
         bv.setBit(22);
         bv.setBit(15);
         bv.clearBit(22);
+        bv.flipBit(8);
         for (int i = 0; i < bv.bitCount(); i++) {
             if (bv.testBit(i)) {
                 System.out.println(i);
