@@ -11,9 +11,9 @@ public class BitVector {
         vector = new int[size];
     }
 
-    private static void checkValidBit(long bit) {
+    private void checkValidBit(long bit) {
         if (bit < 0 || bit >= bitCount) {
-            throw new IndexOutOfBoundsException("bit index is less than 0 or greater than the number of bits");
+            throw new IndexOutOfBoundsException("Bit index is invalid.");
         }
     }
 
@@ -35,8 +35,7 @@ public class BitVector {
         checkValidBit(bit);
         int bucket = getBucket(bit);
         int position = getPosition(bit);
-        int mask = 0xFFFFFFFF;
-        mask = mask ^ (1 << position);
+        int mask = 0xFFFFFFFF ^ (1 << position);
         vector[bucket] &= mask;
     }
 
@@ -56,7 +55,7 @@ public class BitVector {
     }
 
     private static int getPosition(long bit) {
-        return (int)bit%INT_WIDTH;
+        return (int)(bit%INT_WIDTH);
     }
 
     public static void main(String[]args) {
@@ -66,7 +65,6 @@ public class BitVector {
         bv.setBit(1);
         bv.setBit(22);
         bv.setBit(15);
-        bv.setBit(63);
         bv.clearBit(22);
         for (int i = 0; i < bv.bitCount(); i++) {
             if (bv.testBit(i)) {
