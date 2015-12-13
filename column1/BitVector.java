@@ -2,12 +2,12 @@
 public class BitVector {
 
     private int [] vector;
-    private static final int INT_WIDTH = 32;
+    private static final int BUCKET_WIDTH = 32;
     private long bitCount;
 
     public BitVector(long bitCount) {
         this.bitCount = bitCount;
-        int size = 1+(int)(bitCount/INT_WIDTH);
+        int size = 1+(int)(bitCount/BUCKET_WIDTH);
         vector = new int[size];
     }
 
@@ -51,11 +51,11 @@ public class BitVector {
     }
 
     private static int getBucket(long bit) {
-        return (int)(bit/INT_WIDTH);
+        return (int)(bit/BUCKET_WIDTH);
     }
 
     private static int getPosition(long bit) {
-        return (int)(bit%INT_WIDTH);
+        return (int)(bit%BUCKET_WIDTH);
     }
 
     public static void main(String[]args) {
